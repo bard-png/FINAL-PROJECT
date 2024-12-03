@@ -12,8 +12,16 @@ def load_data(file_path, variable_name):
     return data, sigma
 
 def compute_shapiro_wilk(data):
+    # Debugging: Check shape
+    print(f"Original data shape: {data.shape}")
+    if data.shape[1] == 1:  # Check if there's an unnecessary singleton dimension
+        data = np.squeeze(data, axis=1)  # Remove the second dimension (size=1)
+        print(f"Data shape after squeezing: {data.shape}")
+    else:
+        raise ValueError("Unexpected data shape. Ensure the second dimension is singleton (size=1).")
+    
     # Extract dimensions
-    n_levels, n_lat, n_lon = data.shape[1:]
+    _, n_levels, n_lat, n_lon = data.shape
     p_values = np.empty((n_levels, n_lat, n_lon))
 
     # Iterate through model levels, latitude, and longitude
@@ -29,11 +37,6 @@ def calculate_theoretical_pressure(sigma):
     return sigma * 1000
 
 def main():
-    # Parse command-line arguments
-    if len(sys.argv) != 5:
-        print("Usage: python normality_test_speedy.py <days_since_20110101> <ensemble_name> <variable_name> <output_dir>")
-        sys.exit(1)
-
     days_since_20110101 = int(sys.argv[1])
     ensemble_name = sys.argv[2]
     variable_name = sys.argv[3]
