@@ -24,7 +24,8 @@ def compute_shapiro_wilk(data):
                 p_values[level, lat, lon] = shapiro(sample)[1]
 
     return p_values
-            def calculate_theoretical_pressure(sigma):
+
+def calculate_theoretical_pressure(sigma):
     return sigma * 1000
 
 def main():
