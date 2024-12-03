@@ -8,19 +8,23 @@ from netCDF4 import Dataset
 def load_data(file_path, variable_name):
     with Dataset(file_path, 'r') as nc:
         data = nc.variables[variable_name][:]
-        sigma_levels = nc.variables['lev'][:]
-    
-    return data, sigma_levels
+        sigma = nc.variables['sigma'][:]
+    return data, sigma
 
 def compute_shapiro_wilk(data):
-    p_values = np.empty(data.shape[1:])
-    for i in range(data.shape[1]):
-        for j in range(data.shape[2]):
-            sample = data[:, i, j]
-            p_values[i, j] = shapiro(sample)[1]
-    return p_values
+    # Extract dimensions
+    n_levels, n_lat, n_lon = data.shape[1:]
+    p_values = np.empty((n_levels, n_lat, n_lon))
 
-def calculate_theoretical_pressure(sigma):
+    # Iterate through model levels, latitude, and longitude
+    for level in range(n_levels):
+        for lat in range(n_lat):
+            for lon in range(n_lon):
+                sample = data[:, level, lat, lon]
+                p_values[level, lat, lon] = shapiro(sample)[1]
+
+    return p_values
+            def calculate_theoretical_pressure(sigma):
     return sigma * 1000
 
 def main():
@@ -34,7 +38,7 @@ def main():
     variable_name = sys.argv[3]
     output_dir = sys.argv[4]
 
-    # Path to the SPEEDY data directory
+    # Path to the SPEEDY data directory (adjust as needed)
     base_path = "/fs/ess/PAS2856/SPEEDY_ensemble_data"
     ensemble_path = os.path.join(base_path, ensemble_name)
 
@@ -77,5 +81,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-# bash command is python normality_test_speedy.py 0 reference_ens u ./output
-# Hello
