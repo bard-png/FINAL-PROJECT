@@ -14,8 +14,8 @@ def load_data(file_path, variable_name):
 def compute_shapiro_wilk(data):
     # Debugging: Check shape
     print(f"Original data shape: {data.shape}")
-    if data.shape[1] == 1:  # Check if there's an unnecessary singleton dimension
-        data = np.squeeze(data, axis=1)  # Remove the second dimension (size=1)
+    if data.shape[1] == 1:
+        data = np.squeeze(data, axis=1)
         print(f"Data shape after squeezing: {data.shape}")
     else:
         raise ValueError("Unexpected data shape. Ensure the second dimension is singleton (size=1).")
