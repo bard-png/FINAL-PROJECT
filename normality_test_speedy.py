@@ -8,7 +8,7 @@ from netCDF4 import Dataset
 def load_data(file_path, variable_name):
     with Dataset(file_path, 'r') as nc:
         data = nc.variables[variable_name][:]
-        sigma = nc.variables['sigma'][:]
+        sigma = nc.variables['lev'][:]
     return data, sigma
 
 def compute_shapiro_wilk(data):
