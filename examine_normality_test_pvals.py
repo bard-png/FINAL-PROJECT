@@ -16,7 +16,7 @@ def load_pvalues(start_date, end_date, ensemble_name, variable_name, day_interva
     combined_pvals = []
     for date in dates:
         date_str = date.astype(str).replace('-', '')
-        filename = f"{data_dir}/{variable_name}_{ensemble_name}_{date_str}_pvalues.pkl"
+        filename = f"{data_dir}/{variable_name}_{ensemble_name}_{date_str}0000_pvalues.pkl"
         
         if not os.path.exists(filename):
             print(f"File {filename} not found. Skipping.")
