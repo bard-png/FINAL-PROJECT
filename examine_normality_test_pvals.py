@@ -14,7 +14,14 @@ def load_pvalues(start_date, end_date, ensemble_name, variable_name, day_interva
     """
     dates = np.arange(np.datetime64(start_date), np.datetime64(end_date), np.timedelta64(day_interval, 'D'))
     combined_pvals = []
+    days = 150
+    day_count = 0
+
     for date in dates:
+        if day_count >= days:
+            print(f"Stopping after {days} days.")
+            break
+        
         date_str = date.astype(str).replace('-', '')
         filename = f"{data_dir}/{variable_name}_{ensemble_name}_{date_str}0000_pvalues.pkl"
         
@@ -25,6 +32,8 @@ def load_pvalues(start_date, end_date, ensemble_name, variable_name, day_interva
         with open(filename, 'rb') as f:
             data = pickle.load(f)
             combined_pvals.append(data["pvalues"])
+        
+        day_count += 1
     
     if not combined_pvals:
         print("No valid pickle files loaded.")
