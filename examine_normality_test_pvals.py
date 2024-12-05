@@ -50,17 +50,17 @@ def plot_rejections(rejections, title, output_filename):
     """
     Plot the null hypothesis rejections as a function of latitude, model level, or time.
     """
-    
+    swapped_rejections = np.sum(rejections, axis=(1, 2)).T
+
     plt.figure(figsize=(10, 6))
-    plt.imshow(np.sum(rejections, axis=(1, 2)), aspect='auto', cmap='Reds')
+    plt.imshow(swapped_rejections, aspect='auto', cmap='Reds')
     plt.colorbar(label='Number of Null Hypothesis Rejections')
     plt.title(title)
-    plt.xlabel('Model Levels')
-    plt.ylabel('Time (Index)')
+    plt.xlabel('Time (Index)')
+    plt.ylabel('Model Levels')
     plt.savefig(output_filename)
     print(f"Plot saved to {output_filename}")
     plt.close()
-
 
 def main():
     # Parse command-line inputs
